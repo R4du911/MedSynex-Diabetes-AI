@@ -1,11 +1,16 @@
 import numpy as np
 import pandas as pd
-from model.DecisionTree import DecisionTree
+from model.RandomForest import RandomForest
 from sklearn.model_selection import train_test_split
 
 filename = "model/diabetes.csv"
 read_data = pd.read_csv(filename)
 
+# read_data.info()
+# print(read_data.duplicated().sum())
+# print(read_data.describe())
+
+feature_names = read_data.columns[:-1]
 data = read_data.iloc[:, :-1].to_numpy()
 target = read_data.iloc[:, -1].to_numpy()
 
@@ -18,9 +23,11 @@ def accuracy(target_true, target_prediction):
     return np.sum(target_true == target_prediction) / len(target_true)
 
 
-decision_tree = DecisionTree()
-decision_tree.train(data_train, target_train)
-predictions = decision_tree.predict(data_test)
+random_forest = RandomForest()
+random_forest.train(data_train, target_train)
+predictions_random_forest = random_forest.predict(data_test)
 
-acc = accuracy(target_test, predictions)
-print(acc)
+acc_random_forest = accuracy(target_test, predictions_random_forest)
+
+print("\nAccuracy Random Forest: ")
+print(acc_random_forest)
