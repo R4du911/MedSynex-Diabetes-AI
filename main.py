@@ -1,9 +1,7 @@
-import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
 
 from model.RandomForest import RandomForest
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -22,28 +20,7 @@ def train_model():
         data, target, test_size=0.2, random_state=42
     )
 
-    # random_forest_for_hyperparameter_tuning = RandomForestClassifier()
-    # param_grid = [{
-    #     "max_depth": [5, 10, 13, 14, 15, 16, 17, 18, 20, 22, 25, 30],
-    #     "min_samples_split": [2, 4, 5, 7, 8, 10, 12]
-    # }]
-    # random_forest_searcher = GridSearchCV(estimator=random_forest_for_hyperparameter_tuning,
-    #                                       param_grid=param_grid,
-    #                                       cv=5, n_jobs=-1)
-    # random_forest_searcher.fit(data_train, target_train)
-    # print(random_forest_searcher.best_params_)
-
     random_forest.train(data_train, target_train)
-
-    def accuracy(target_true, target_prediction):
-        return np.sum(target_true == target_prediction) / len(target_true)
-
-    predictions_random_forest = random_forest.predict(data_test)
-    acc_random_forest = accuracy(target_test, predictions_random_forest)
-
-    print("\nModel accuracy: ")
-    print(acc_random_forest)
-    print("\n")
 
 
 @app.route("/diabetes-prediction", methods=['POST'])
